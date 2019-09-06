@@ -14,12 +14,18 @@
       "autoFix": true
     }
   ],
+  "eslint.options": {
+    "rules": {
+      "semi": ["error", "never"]
+    }
+  },
   "typescript.format.enable": true,
   "javascript.format.enable": true,
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
   "prettier.jsxSingleQuote": false,
   "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
   "files.autoSave": "onFocusChange",
   "javascript.implicitProjectConfig.experimentalDecorators": true,
   "editor.tabSize": 2

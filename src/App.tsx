@@ -1,8 +1,15 @@
-import React from 'react';
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import Router from './router';
+import { store } from './utils';
 import './App.scss';
 
-const App: React.FC = () => {
-  return <div className="App">尽情开发吧</div>;
-};
-
-export default App;
+export default class App extends React.Component {
+  public render() {
+    return (
+      <Provider store={store}>
+        <Router />
+      </Provider>
+    );
+  }
+}
