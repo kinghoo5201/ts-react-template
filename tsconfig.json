@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "lib": ["dom", "es5", "es6", "es7", "scripthost", "es2018.promise"],
     "outDir": "built",
-    "sourceMap": true
+    "sourceMap": true,
+    "noImplicitThis": false
   },
   "exclude": ["node_modules", "built"]
 }
