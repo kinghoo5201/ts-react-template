@@ -16,7 +16,7 @@
   ],
   "eslint.options": {
     "rules": {
-      "semi": ["error", "never"]
+      "semi": true
     }
   },
   "typescript.format.enable": true,
