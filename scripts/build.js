@@ -139,7 +139,7 @@ checkBrowsers(paths.appPath, isInteractive)
       var fileNames=Object.keys(files);
       for(var key in fileNames){
         var fileName=fileNames[key];
-        if(/.chunk./.test(fileName)){
+        if(/\\.chunk\\./.test(fileName)){
           loadChunk(fileName);
         }
       }
