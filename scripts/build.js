@@ -112,33 +112,43 @@ checkBrowsers(paths.appPath, isInteractive)
     }
   )
   .then(() => {
+    const random = Date.now();
     const manifest = require(path.resolve(paths.appBuild, 'asset-manifest.json'));
     fs.writeFileSync(path.resolve(paths.appBuild, 'chunk-preloader.js'), `
     // 这个文件要在main.js之前引入，用于加载chunk文件,如果文件引入错误，请检查package.json中的homePage配置
     +function(){
       function loadChunk(fileName){
-        var pattern=/(\.css$|\.js$)/;
-        var isCss=/\.css$/;
-        var isJs=/\.js$/;
+        var SITE_PROTOCOL = location.protocol === 'https:' ? 'https:' : 'http:';
+        var pattern=/(\\.css$|\\.js$)/;
+        var isCss=/\\.css\\??/;
+        var isJs=/\\.js\\??/;
         if(!pattern.test(fileName)){
           return;
         }
+        if(/^\\/\\//.test(fileName)){
+          fileName=SITE_PROTOCOL+fileName;
+        }
         var scp;
+        if(/_pre/.test(fileName)){
+          fileName=fileName+'?random='+'${random}';
+        }
         if(isJs.test(fileName)){
           scp=document.createElement('script');
           scp.src=fileName;
         }
         if(isCss.test(fileName)){
           scp=document.createElement('link');
-          link.href=fileName;
+          scp.setAttribute('rel', 'stylesheet');
+          scp.href=fileName;
         }
-        document.querySelector('head').appendChild(scp);
+        document.querySelector('body').appendChild(scp);
       }
       var manifest=${JSON.stringify(manifest)};
       var files=manifest.files||{};
       var fileNames=Object.keys(files);
       for(var key in fileNames){
-        var fileName=fileNames[key];
+        var fileKey=fileNames[key];
+        var fileName=files[fileKey];
         if(/\\.chunk\\./.test(fileName)){
           loadChunk(fileName);
         }
