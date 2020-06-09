@@ -117,6 +117,7 @@ checkBrowsers(paths.appPath, isInteractive)
     fs.writeFileSync(path.resolve(paths.appBuild, 'chunk-preloader.js'), `
     // 这个文件要在main.js之前引入，用于加载chunk文件,如果文件引入错误，请检查package.json中的homePage配置
     +function(){
+      var eventList = [];
       function loadChunk(fileName){
         var SITE_PROTOCOL = location.protocol === 'https:' ? 'https:' : 'http:';
         var pattern=/(\\.css$|\\.js$)/;
@@ -142,6 +143,14 @@ checkBrowsers(paths.appPath, isInteractive)
           scp.href=fileName;
         }
         document.querySelector('body').appendChild(scp);
+        eventList.push(fileName);
+        scp.onload = function () {
+          var index = eventList.findIndex(item => item === fileName);
+          eventList.splice(index, 1);
+          if (!eventList.length) {
+            window.afterChunPreLoad && window.afterChunPreLoad();
+          }
+        }
       }
       var manifest=${JSON.stringify(manifest)};
       var files=manifest.files||{};
